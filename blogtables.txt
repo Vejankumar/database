@@ -1,0 +1,64 @@
+CREATE TABLE `author` (
+  `a_id` int(10) unsigned NOT NULL,
+  `a_name` varchar(40) DEFAULT NULL,
+  `skills` varchar(40) DEFAULT NULL,
+  `address` varchar(40) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
+  PRIMARY KEY (`a_id`)
+);
+
+CREATE TABLE `post` (
+  `p_id` int(10) unsigned NOT NULL,
+  `p_name` varchar(25) DEFAULT NULL,
+  `cat_id` int(10) unsigned DEFAULT NULL,
+  `DateofCreation` date DEFAULT NULL,
+  PRIMARY KEY (`p_id`),
+  KEY `post_id_fk` (`cat_id`),
+  CONSTRAINT `post_id_fk` FOREIGN KEY (`cat_id`) REFERENCES `category` (`cat_id`)
+);
+
+
+CREATE TABLE `comments` (
+  `com_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `com` varchar(40) DEFAULT NULL,
+  `p_id` int(10) unsigned DEFAULT NULL,
+  `dateofcomment` date DEFAULT NULL,
+  PRIMARY KEY (`com_id`),
+  KEY `comuser_id_fk` (`user_id`),
+  KEY `compost_id_fk` (`p_id`),
+  CONSTRAINT `compost_id_fk` FOREIGN KEY (`p_id`) REFERENCES `post` (`p_id`),
+  CONSTRAINT `comuser_id_fk` FOREIGN KEY (`user_id`) REFERENCES `author` (`a_id`)
+) 
+
+
+CREATE TABLE `junc` (
+  `p_id` int(10) unsigned DEFAULT NULL,
+  `a_id` int(10) unsigned DEFAULT NULL,
+  `DOP` date DEFAULT NULL,
+  KEY `juncp_id_fk` (`p_id`),
+  KEY `junca_id_fk` (`a_id`),
+  CONSTRAINT `juncp_id_fk` FOREIGN KEY (`p_id`) REFERENCES `post` (`p_id`),
+  CONSTRAINT `junca_id_fk` FOREIGN KEY (`a_id`) REFERENCES `author` (`a_id`)
+);
+
+CREATE TABLE `blog` (
+  `blog_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `blog_url` varchar(40) DEFAULT NULL,
+  `created_at` date DEFAULT NULL,
+  PRIMARY KEY (`blog_id`)
+);
+
+
+CREATE TABLE `category` (
+  `cat_id` int(10) unsigned NOT NULL,
+  `cat_name` varchar(40) DEFAULT NULL,
+  `blog_id` int(10) unsigned DEFAULT NULL,
+  `parent_cat_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`cat_id`),
+  KEY `blog_id_fk` (`blog_id`),
+  KEY `cat_id_fk` (`parent_cat_id`),
+  CONSTRAINT `blog_id_fk` FOREIGN KEY (`blog_id`) REFERENCES `blog` (`id`),
+  CONSTRAINT `cat_id_fk` FOREIGN KEY (`parent_cat_id`) REFERENCES `category` (`cat_id`)
+);
+
